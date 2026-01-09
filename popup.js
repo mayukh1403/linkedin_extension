@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // Step-by-step workflow with localStorage persistence
 // This ensures no data is lost and both email and profile are captured
 
@@ -64,7 +63,7 @@ function saveData() {
 async function updateLinkedInUrl() {
   try {
     // Only uses chrome.tabs.query to get URL - completely safe, no LinkedIn detection
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab && tab.url) {
       // Check if it's a LinkedIn URL (just reading the URL string - safe!)
       if (tab.url.includes('linkedin.com')) {
@@ -73,7 +72,7 @@ async function updateLinkedInUrl() {
         const urlDisplay = document.getElementById('linkedinUrlDisplay');
         if (urlDisplay) {
           urlDisplay.textContent = tab.url;
-          urlDisplay.style.color = '#28a745';
+          urlDisplay.style.color = '#ff1744';
           const statusEl = urlDisplay.parentElement.querySelector('.url-status');
           if (statusEl) {
             statusEl.textContent = 'LinkedIn Detected';
@@ -96,7 +95,7 @@ async function updateLinkedInUrl() {
             }
           } else {
             urlDisplay.textContent = 'Not on LinkedIn page';
-            urlDisplay.style.color = '#dc3545';
+            urlDisplay.style.color = '#dc143c';
             const statusEl = urlDisplay.parentElement.querySelector('.url-status');
             if (statusEl) {
               statusEl.textContent = 'Not LinkedIn';
@@ -198,7 +197,7 @@ function goToStep(stepNumber, saveState = true) {
 }
 
 // Helper function to update status message
-function updateStatus(message, color = "black") {
+function updateStatus(message, color = "#e0e0e0") {
   const statusEl = document.getElementById('status');
   if (statusEl) {
     statusEl.textContent = message;
@@ -209,43 +208,32 @@ function updateStatus(message, color = "black") {
 // Helper function to capture email from clipboard
 async function captureEmailFromClipboard() {
   try {
-    updateStatus("Reading clipboard...", "blue");
+    updateStatus("Reading clipboard...", "#ff1744");
     
     const clipboardText = await navigator.clipboard.readText();
     
     if (!clipboardText || clipboardText.trim().length === 0) {
-      updateStatus("Error: Clipboard is empty! Copy the email first.", "red");
+      updateStatus("Error: Clipboard is empty! Copy the email first.", "#dc143c");
       return;
     }
 
     // Extract email
-=======
-document.getElementById('startBtn').addEventListener('click', async () => {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
-  // Check if it's LinkedIn
-  if (tab.url.includes("linkedin.com")) {
-    
-    // Get Clipboard Email
-    const clipboardText = await navigator.clipboard.readText();
->>>>>>> 13dcfec22b15efda5e2f6c307e2183288223da9d
     const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
     const emailMatch = clipboardText.match(emailRegex);
-
+    
     if (emailMatch) {
-<<<<<<< HEAD
       savedData.email = emailMatch[0];
       document.getElementById('email').value = savedData.email;
       saveData();
       updateStepIndicators();
-      updateStatus("Email captured: " + savedData.email + " (Saved! You can close popup now)", "green");
+      updateStatus("Email captured: " + savedData.email + " (Saved! You can close popup now)", "#ff1744");
       setTimeout(() => updateStatus(""), 3000);
     } else {
-      updateStatus("No email found in clipboard. Please copy an email address.", "red");
+      updateStatus("No email found in clipboard. Please copy an email address.", "#dc143c");
     }
 
   } catch (error) {
-    updateStatus("Error: " + error.message, "red");
+    updateStatus("Error: " + error.message, "#dc143c");
   }
 }
 
@@ -265,20 +253,20 @@ async function captureProfileFromClipboard() {
     // Check if we're on LinkedIn (ONLY reads URL, no DOM access - safe!)
     const isLinkedIn = await updateLinkedInUrl();
     if (!isLinkedIn && !savedData.linkedinUrl) {
-      updateStatus("Warning: Not on LinkedIn page. Please navigate to a LinkedIn profile first.", "orange");
+      updateStatus("Warning: Not on LinkedIn page. Please navigate to a LinkedIn profile first.", "#ffc107");
       // Still allow capture, but warn user
     }
     
-    updateStatus("Reading clipboard...", "blue");
+    updateStatus("Reading clipboard...", "#ff1744");
     
     const clipboardText = await navigator.clipboard.readText();
     
     if (!clipboardText || clipboardText.trim().length === 0) {
-      updateStatus("Error: Clipboard is empty! Copy the profile text first.", "red");
+      updateStatus("Error: Clipboard is empty! Copy the profile text first.", "#dc143c");
       return;
     }
 
-    updateStatus("Parsing profile data...", "blue");
+    updateStatus("Parsing profile data...", "#ff1744");
 
     // Parse LinkedIn data from clipboard (ONLY parsing user-provided text - safe!)
     const parsedData = parseLinkedInData(clipboardText);
@@ -300,11 +288,11 @@ async function captureProfileFromClipboard() {
     saveData();
     updateStepIndicators();
     
-    updateStatus("Profile data captured! Review the fields below.", "green");
+    updateStatus("Profile data captured! Review the fields below.", "#ff1744");
     setTimeout(() => updateStatus(""), 3000);
 
   } catch (error) {
-    updateStatus("Error: " + error.message, "red");
+    updateStatus("Error: " + error.message, "#dc143c");
   }
 }
 
@@ -313,7 +301,7 @@ document.getElementById('captureProfileBtn').addEventListener('click', capturePr
 
 // Refresh clipboard button (for when popup was closed)
 document.getElementById('refreshClipboardBtn').addEventListener('click', async () => {
-  updateStatus("Refreshing from clipboard...", "blue");
+  updateStatus("Refreshing from clipboard...", "#ff1744");
   await captureProfileFromClipboard();
 });
 
@@ -331,7 +319,7 @@ document.getElementById('nextToStep2').addEventListener('click', () => {
   if (savedData.email && savedData.email.trim().length > 0) {
     goToStep(2);
   } else {
-    updateStatus("Please capture an email first!", "red");
+    updateStatus("Please capture an email first!", "#dc143c");
   }
 });
 
@@ -353,7 +341,7 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
     // Validate email
     const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
     if (!savedData.email || !emailRegex.test(savedData.email)) {
-      updateStatus("Error: Please enter a valid email address!", "red");
+      updateStatus("Error: Please enter a valid email address!", "#dc143c");
       goToStep(1);
       return;
     }
@@ -373,12 +361,12 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
       "linkedinUrl": linkedinUrl
     };
 
-    updateStatus("Sending data to Google Sheets...", "blue");
+    updateStatus("Sending data to Google Sheets...", "#ff1744");
 
     // Send to background to post to Google Sheets
     chrome.runtime.sendMessage({ type: "SEND_DATA", payload: data }, (response) => {
       if (response && response.message) {
-        updateStatus("Success! Data sent: " + data.email, "green");
+        updateStatus("Success! Data sent: " + data.email, "#ff1744");
         
         // Clear saved data after successful send (but keep step state for next entry)
         savedData = {
@@ -409,12 +397,12 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
           updateLinkedInUrl(); // Refresh URL
         }, 3000);
       } else {
-        updateStatus("Error sending data to Google Sheets", "red");
+        updateStatus("Error sending data to Google Sheets", "#dc143c");
       }
     });
 
   } catch (error) {
-    updateStatus("Error: " + error.message, "red");
+    updateStatus("Error: " + error.message, "#dc143c");
   }
 });
 
@@ -483,7 +471,7 @@ async function initialize() {
             // Check if it looks like profile data (has name-like patterns)
             const hasNamePattern = /[A-Z][a-z]+\s+[A-Z][a-z]+/.test(clipboardText);
             if (hasNamePattern) {
-              updateStatus("Clipboard has text! Click 'Capture Profile' or 'Refresh' to parse it.", "blue");
+              updateStatus("Clipboard has text! Click 'Capture Profile' or 'Refresh' to parse it.", "#ff1744");
             }
           }
         } catch (e) {
@@ -501,28 +489,3 @@ if (document.readyState === 'loading') {
   // DOM already loaded
   initialize();
 }
-=======
-      // Your exact requested data structure
-      const data = {
-        "name": "No Name Found",
-        "title": "No Title Found",
-        "company": "No Company Found",
-        "college": "No College Found",
-        "gradYear" : "No Grad Year Found",
-        "email": emailMatch[0],
-        "linkedinUrl": tab.url
-      };
-
-      // Send to background to post to Google Sheets
-      chrome.runtime.sendMessage({type: "SEND_DATA", payload: data}, (response) => {
-        alert("Data sent: " + emailMatch[0]);
-      });
-      
-    } else {
-      alert("No email found in clipboard!");
-    }
-  } else {
-    alert("This is not a LinkedIn page.");
-  }
-});
->>>>>>> 13dcfec22b15efda5e2f6c307e2183288223da9d
