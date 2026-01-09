@@ -1,7 +1,11 @@
 {
   "manifest_version": 3,
   "name": "LinkedIn Clipboard Linker",
+<<<<<<< HEAD
+  "version": "2.0",
+=======
   "version": "1.0",
+>>>>>>> 13dcfec22b15efda5e2f6c307e2183288223da9d
   "permissions": ["clipboardRead", "activeTab"],
   "background": {
     "service_worker": "background.js"
@@ -9,5 +13,12 @@
   "action": {
     "default_popup": "popup.html"
   },
+<<<<<<< HEAD
+  "host_permissions": [
+    "https://script.google.com/*",
+    "https://script.googleusercontent.com/*"
+  ]
+=======
   "host_permissions": ["https://script.google.com/*", "https://script.googleusercontent.com/*"]
+>>>>>>> 13dcfec22b15efda5e2f6c307e2183288223da9d
 }

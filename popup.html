@@ -1,3 +1,684 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      width: 420px;
+      min-height: 500px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+      color: #e0e0e0;
+      padding: 0;
+      margin: 0;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(220, 20, 60, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(220, 20, 60, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .container {
+      position: relative;
+      z-index: 1;
+      padding: 24px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(220, 20, 60, 0.2);
+    }
+    
+    .header h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+    
+    .header .subtitle {
+      font-size: 11px;
+      color: #888;
+      margin-top: 6px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    /* Glass Morphism Step Indicator */
+    .step-indicator {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      position: relative;
+      padding: 0 20px;
+    }
+    
+    .step-line {
+      position: absolute;
+      top: 20px;
+      left: 60px;
+      right: 60px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 0;
+    }
+    
+    .step-line-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #dc143c 0%, #ff1744 100%);
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0%;
+      box-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
+    }
+    
+    .step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      color: #888;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 8px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .step.active .step-circle {
+      background: linear-gradient(135deg, rgba(220, 20, 60, 0.3) 0%, rgba(255, 23, 68, 0.2) 100%);
+      border-color: #dc143c;
+      color: #ff1744;
+      box-shadow: 0 0 20px rgba(220, 20, 60, 0.4);
+      transform: scale(1.1);
+    }
+    
+    .step.completed .step-circle {
+      background: linear-gradient(135deg, rgba(220, 20, 60, 0.4) 0%, rgba(255, 23, 68, 0.3) 100%);
+      border-color: #dc143c;
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(220, 20, 60, 0.3);
+    }
+    
+    .step.completed .step-circle::after {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #dc143c;
+      position: absolute;
+    }
+    
+    .step-label {
+      font-size: 10px;
+      color: #666;
+      margin-top: 4px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: color 0.3s;
+    }
+    
+    .step.active .step-label {
+      color: #ff1744;
+    }
+    
+    .step.completed .step-label {
+      color: #888;
+    }
+    
+    /* Step Content */
+    .step-content {
+      display: none;
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .step-content.active {
+      display: block;
+    }
+    
+    /* Glass Morphism Cards */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .glass-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(220, 20, 60, 0.3);
+    }
+    
+    .step-instructions {
+      background: rgba(220, 20, 60, 0.08);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(220, 20, 60, 0.2);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .step-instructions strong {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #ff1744;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .step-instructions ol {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 12px;
+      line-height: 1.8;
+      color: #bbb;
+    }
+    
+    .step-instructions li {
+      margin-bottom: 6px;
+    }
+    
+    .info-box {
+      background: rgba(220, 20, 60, 0.05);
+      border-left: 2px solid #dc143c;
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin-top: 12px;
+      font-size: 11px;
+      color: #aaa;
+      line-height: 1.6;
+    }
+    
+    .info-box strong {
+      color: #ff1744;
+      font-weight: 600;
+    }
+    
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 600;
+      color: #bbb;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .capture-status {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .capture-status.success {
+      background: rgba(220, 20, 60, 0.2);
+      color: #ff1744;
+      border: 1px solid rgba(220, 20, 60, 0.3);
+    }
+    
+    .capture-status.pending {
+      background: rgba(255, 255, 255, 0.05);
+      color: #888;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      font-size: 13px;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+    }
+    
+    input::placeholder {
+      color: #555;
+    }
+    
+    input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: #dc143c;
+      box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.1);
+    }
+    
+    input.captured {
+      border-color: rgba(220, 20, 60, 0.4);
+      background: rgba(220, 20, 60, 0.05);
+    }
+    
+    .manual-entry-note {
+      font-size: 10px;
+      color: #666;
+      margin-top: 6px;
+      font-style: italic;
+    }
+    
+    /* URL Display */
+    .url-display-box {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .url-display-box label {
+      font-size: 10px;
+      margin-bottom: 8px;
+    }
+    
+    #linkedinUrlDisplay {
+      font-size: 11px;
+      color: #aaa;
+      word-break: break-all;
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 6px;
+      margin-top: 8px;
+      font-family: 'Monaco', 'Courier New', monospace;
+    }
+    
+    .url-status {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .url-status.success {
+      background: rgba(220, 20, 60, 0.2);
+      color: #ff1744;
+      border: 1px solid rgba(220, 20, 60, 0.3);
+    }
+    
+    .url-status.warning {
+      background: rgba(255, 193, 7, 0.15);
+      color: #ffc107;
+      border: 1px solid rgba(255, 193, 7, 0.3);
+    }
+    
+    .url-status.error {
+      background: rgba(220, 20, 60, 0.15);
+      color: #dc143c;
+      border: 1px solid rgba(220, 20, 60, 0.3);
+    }
+    
+    .safe-note {
+      font-size: 10px;
+      color: #888;
+      margin-top: 8px;
+      font-style: italic;
+    }
+    
+    /* Buttons */
+    button {
+      width: 100%;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, rgba(220, 20, 60, 0.2) 0%, rgba(255, 23, 68, 0.15) 100%);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(220, 20, 60, 0.3);
+      border-radius: 10px;
+      color: #ff1744;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    button:hover::before {
+      left: 100%;
+    }
+    
+    button:hover:not(:disabled) {
+      background: linear-gradient(135deg, rgba(220, 20, 60, 0.3) 0%, rgba(255, 23, 68, 0.25) 100%);
+      border-color: #dc143c;
+      box-shadow: 0 4px 20px rgba(220, 20, 60, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    
+    button:disabled {
+      background: rgba(255, 255, 255, 0.02);
+      border-color: rgba(255, 255, 255, 0.05);
+      color: #555;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    
+    button.secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #bbb;
+    }
+    
+    button.secondary:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+    
+    button.success {
+      background: linear-gradient(135deg, #dc143c 0%, #ff1744 100%);
+      border-color: #dc143c;
+      color: #ffffff;
+      box-shadow: 0 4px 20px rgba(220, 20, 60, 0.4);
+    }
+    
+    button.success:hover:not(:disabled) {
+      box-shadow: 0 6px 30px rgba(220, 20, 60, 0.5);
+      transform: translateY(-2px);
+    }
+    
+    /* Status Message */
+    #status {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      text-align: center;
+      min-height: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    /* Review Section */
+    .review-section {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .review-item {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .review-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .review-label {
+      font-size: 9px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    
+    .review-value {
+      font-size: 13px;
+      color: #ffffff;
+      font-weight: 500;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h3>LinkedIn Data Collector</h3>
+      <div class="subtitle">Professional Profile Manager</div>
+    </div>
+    
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+      <div class="step-line"><div class="step-line-fill" id="stepLineFill"></div></div>
+      <div class="step active" id="step1">
+        <div class="step-circle">1</div>
+        <div class="step-label">Email</div>
+      </div>
+      <div class="step" id="step2">
+        <div class="step-circle">2</div>
+        <div class="step-label">Profile</div>
+      </div>
+      <div class="step" id="step3">
+        <div class="step-circle">3</div>
+        <div class="step-label">Review</div>
+      </div>
+    </div>
+    
+    <!-- Step 1: Capture Email -->
+    <div class="step-content active" id="stepContent1">
+      <div class="step-instructions">
+        <strong>Step 1: Capture Email</strong>
+        <ol>
+          <li>Copy the email address to your clipboard</li>
+          <li>Click "Capture Email from Clipboard" below</li>
+          <li>You can close this popup - your data is saved</li>
+          <li>Or manually enter the email in the field</li>
+        </ol>
+        <div class="info-box">
+          <strong>Auto-Save:</strong> All data is saved automatically. You can close and reopen the popup anytime without losing progress.
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">
+          Email Address
+          <span class="capture-status pending" id="emailStatus">Not Captured</span>
+        </label>
+        <input type="email" id="email" placeholder="email@example.com">
+        <div class="manual-entry-note">You can also type the email manually</div>
+      </div>
+      
+      <button id="captureEmailBtn">Capture Email from Clipboard</button>
+      <button id="nextToStep2" class="secondary" disabled>Next: Capture Profile Data</button>
+    </div>
+    
+    <!-- Step 2: Capture Profile Data -->
+    <div class="step-content" id="stepContent2">
+      <div class="step-instructions">
+        <strong>Step 2: Capture Profile Data</strong>
+        <ol>
+          <li>Go to the LinkedIn profile page</li>
+          <li>Select all profile text (Ctrl+A or Cmd+A)</li>
+          <li>Copy it (Ctrl+C or Cmd+C)</li>
+          <li>You can close this popup now - your data is saved</li>
+          <li>Reopen the extension and click "Capture Profile from Clipboard"</li>
+          <li>Or manually fill in the fields</li>
+        </ol>
+        <div class="info-box">
+          <strong>Tip:</strong> The popup can close when you copy text - that's okay! Just reopen it and click the capture button. All your data is automatically saved.
+        </div>
+      </div>
+      
+      <div class="url-display-box">
+        <label>
+          LinkedIn Profile URL
+          <span class="url-status" style="background-color: rgba(255, 193, 7, 0.15); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.3);">Checking...</span>
+        </label>
+        <div id="linkedinUrlDisplay">Loading...</div>
+        <div class="safe-note">Safe: Only URL captured from browser tab. No LinkedIn scraping or DOM access.</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="name">
+          Name
+          <span class="capture-status pending" id="nameStatus">Not Captured</span>
+        </label>
+        <input type="text" id="name" placeholder="Full Name">
+      </div>
+      
+      <div class="form-group">
+        <label for="title">
+          Title / Headline
+          <span class="capture-status pending" id="titleStatus">Not Captured</span>
+        </label>
+        <input type="text" id="title" placeholder="Job Title">
+      </div>
+      
+      <div class="form-group">
+        <label for="company">
+          Company
+          <span class="capture-status pending" id="companyStatus">Not Captured</span>
+        </label>
+        <input type="text" id="company" placeholder="Current Company">
+      </div>
+      
+      <div class="form-group">
+        <label for="college">
+          College / University
+          <span class="capture-status pending" id="collegeStatus">Not Captured</span>
+        </label>
+        <input type="text" id="college" placeholder="Educational Institution">
+      </div>
+      
+      <div class="form-group">
+        <label for="gradYear">
+          Graduation Year
+          <span class="capture-status pending" id="gradYearStatus">Not Captured</span>
+        </label>
+        <input type="text" id="gradYear" placeholder="YYYY">
+      </div>
+      
+      <button id="captureProfileBtn">Capture Profile from Clipboard</button>
+      <button id="refreshClipboardBtn" class="secondary">Refresh from Clipboard</button>
+      <button id="backToStep1" class="secondary">Back to Email</button>
+      <button id="nextToStep3" class="secondary" disabled>Next: Review & Send</button>
+    </div>
+    
+    <!-- Step 3: Review & Send -->
+    <div class="step-content" id="stepContent3">
+      <div class="step-instructions">
+        <strong>Step 3: Review & Send</strong>
+        <p style="margin: 0; color: #bbb; font-size: 12px; line-height: 1.6;">Please review all the data below. You can go back to edit any field.</p>
+      </div>
+      
+      <div class="review-section">
+        <div class="review-item">
+          <div class="review-label">Email</div>
+          <div class="review-value" id="reviewEmail">-</div>
+        </div>
+        <div class="review-item">
+          <div class="review-label">Name</div>
+          <div class="review-value" id="reviewName">-</div>
+        </div>
+        <div class="review-item">
+          <div class="review-label">Title</div>
+          <div class="review-value" id="reviewTitle">-</div>
+        </div>
+        <div class="review-item">
+          <div class="review-label">Company</div>
+          <div class="review-value" id="reviewCompany">-</div>
+        </div>
+        <div class="review-item">
+          <div class="review-label">College</div>
+          <div class="review-value" id="reviewCollege">-</div>
+        </div>
+        <div class="review-item">
+          <div class="review-label">Graduation Year</div>
+          <div class="review-value" id="reviewGradYear">-</div>
+        </div>
+        <div class="review-item">
+          <div class="review-label">LinkedIn URL</div>
+          <div class="review-value" id="reviewUrl" style="font-size: 11px; word-break: break-all; color: #aaa;">-</div>
+        </div>
+      </div>
+      
+      <button id="sendBtn" class="success">Send to Google Sheets</button>
+      <button id="backToStep2" class="secondary">Back to Profile</button>
+  <p id="status"></p>
+    </div>
+  </div>
+  
+  <script src="parser.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
+=======
 
 <!DOCTYPE html>
 <html>
@@ -9,3 +690,4 @@
 </body>
 </html>
 
+>>>>>>> 13dcfec22b15efda5e2f6c307e2183288223da9d
